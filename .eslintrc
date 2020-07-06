@@ -1,0 +1,38 @@
+{
+  "extends": [
+    "airbnb-typescript",
+    "airbnb/hooks",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking"
+  ],
+  "plugins": ["@typescript-eslint"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "rules": {
+    "import/no-extraneous-dependencies": [
+      "off"
+    ],
+    // set as described in TO-DO in Airbnb's rule - as we are using `public class fields` anyway
+    // @see https://github.com/airbnb/javascript/blob/3fb312f18198364bacc07e61ca58ff89f9f0afa2/packages/eslint-config-airbnb/rules/react.js#L482-L490
+    "react/state-in-constructor": [
+      "error",
+      "never"
+    ],
+    "react/static-property-placement": [
+      "error",
+      "static public field"
+    ],
+    "react/jsx-props-no-spreading": [
+      "error",
+      {
+        "html": "enforce",
+        "custom": "ignore",
+        "exceptions": []
+      }
+    ],
+    "no-void": ["error", { "allowAsStatement": true }]
+  }
+}

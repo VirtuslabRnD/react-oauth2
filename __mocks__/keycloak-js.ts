@@ -5,7 +5,7 @@ export const mockKeycloakLogout = jest.fn();
 export const mockKeycloakInit = jest.fn();
 export const mockKeycloakLoadUserProfile = jest.fn();
 
-export default (): KeycloakInstance<'native'> => ({
+export default (): KeycloakInstance => ({
   login: mockKeycloakLogin,
   logout: mockKeycloakLogout,
   init: mockKeycloakInit.mockResolvedValue(false),

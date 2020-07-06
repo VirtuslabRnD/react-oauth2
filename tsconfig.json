@@ -1,4 +1,32 @@
 {
-  "extends": "../../tsconfig.json",
-  "compilerOptions": {}
+  "compilerOptions": {
+    "target": "es6",
+    "lib": [
+      "dom",
+      "dom.iterable"
+    ],
+    "allowJs": false,
+    "checkJs": false,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "commonjs",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": false,
+    "jsx": "react",
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "sourceMap": true,
+    "typeRoots": [
+      "./@types",
+      "./node_modules/@types"
+    ],
+    "declaration": true,
+    "outDir": "./lib"
+  }
 }

@@ -17,7 +17,7 @@ export interface KeycloakAuthConfig
 }
 
 export default class KeycloakAdapter extends AbstractAdapter {
-  protected readonly keycloak: KeycloakInstance<'native'>;
+  protected readonly keycloak: KeycloakInstance;
 
   protected readonly config: KeycloakAuthConfig;
 
@@ -45,32 +45,32 @@ export default class KeycloakAdapter extends AbstractAdapter {
     } = config;
     this.config = config;
 
-    const keycloak = Keycloak<'native'>({
+    this.keycloak = Keycloak({
       clientId,
       realm,
       url,
     });
 
-    this.keycloak = keycloak;
+    const { keycloak } = this;
 
     keycloak.onTokenExpired = (): void => {
       if (autoRenew) {
         if (flow === 'implicit') {
-          this.login();
+          void this.login();
         } else {
-          keycloak.updateToken(30);
+          void keycloak.updateToken(30);
         }
       } else {
-        this.clearToken();
+        void this.clearToken();
       }
     };
 
     keycloak.onAuthRefreshError = (): void => {
-      this.clearToken();
+      void this.clearToken();
     };
 
     keycloak.onAuthLogout = (): void => {
-      this.logout();
+      void this.logout();
     };
 
     this.initializing = keycloak
@@ -81,16 +81,18 @@ export default class KeycloakAdapter extends AbstractAdapter {
         responseMode,
         silentCheckSsoRedirectUri,
         pkceMethod: 'S256',
-        promiseType: 'native',
       });
 
-    this.fetchUserProfile();
+    void this.fetchUserProfile();
   }
 
   public isAuthenticated(): boolean {
-    const { authenticated, isTokenExpired, token } = this.keycloak;
+    const {
+      authenticated,
+      token,
+    } = this.keycloak;
 
-    return Boolean(token && !isTokenExpired() && authenticated);
+    return Boolean(token && !this.keycloak.isTokenExpired() && authenticated);
   }
 
   public async isAuthenticating(): Promise<boolean> {
@@ -139,8 +141,8 @@ export default class KeycloakAdapter extends AbstractAdapter {
     return this.userProfile;
   }
 
-  public async clearToken(): Promise<void> {
-    await this.keycloak.clearToken();
+  public clearToken(): Promise<void> {
+    return Promise.resolve(this.keycloak.clearToken());
   }
 
   public async getAccessToken(): Promise<string | undefined> {

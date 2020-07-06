@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { render, wait } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 
 import KeycloakAdapter, { KeycloakAuthConfig } from '../src/auth/KeycloakAdapter';
 
@@ -43,7 +43,6 @@ it('renders withSecure and withoutSecurity HOCs properly when authenticated', as
   const SecuredComponentWithSecure = withSecure(SecuredComponent);
   const UnSecuredComponentWithoutSecure = withSecure(UnSecuredComponent, false);
 
-
   const { getByText, queryByText } = render(
     <SecurityContext.Provider value={value}>
       <SecuredComponentWithSecure />
@@ -54,7 +53,7 @@ it('renders withSecure and withoutSecurity HOCs properly when authenticated', as
   auth.isAuthenticated.mockReturnValue(true);
   auth.isAuthenticating.mockResolvedValue(true);
   // wait for auth.login...
-  await wait(() => {
+  await waitFor(() => {
     expect(queryByText(/TEST Loading\.\.\./)).not.toBeInTheDocument();
   });
 
@@ -86,7 +85,6 @@ it('renders withSecure and withoutSecurity HOCs properly when NOT authenticated'
   const SecuredComponentWithSecure = withSecure(SecuredComponent);
   const UnSecuredComponentWithoutSecure = withSecure(UnSecuredComponent, false);
 
-
   const { getByText, queryByText } = render(
     <SecurityContext.Provider value={value}>
       <SecuredComponentWithSecure />
@@ -95,7 +93,7 @@ it('renders withSecure and withoutSecurity HOCs properly when NOT authenticated'
   );
 
   // wait for auth.login...
-  await wait(() => {
+  await waitFor(() => {
     expect(queryByText(/TEST Loading\.\.\./)).not.toBeInTheDocument();
   });
 

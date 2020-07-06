@@ -44,7 +44,6 @@ it('should return a token', async () => {
   expect(await keycloakAdapter.getAccessToken()).toBe('this is a token');
 });
 
-
 it('should call keycloak.logout properly', async () => {
   const keycloakAdapter = new KeycloakAdapter(config);
 

@@ -29,7 +29,7 @@ function SecurityProvider(props: SecurityProviderProps): ReactElement | null {
     setAuth(keycloakAuth);
 
     let cancelled = false;
-    keycloakAuth
+    void keycloakAuth
       .isAuthenticating()
       .then(() => {
         if (!cancelled) {
@@ -72,7 +72,7 @@ SecurityProvider.defaultProps = {
   error(err: ErrorComponentProps) {
     return (
       <>
-      Error:
+        Error:
         {err.error}
       </>
     );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, wait } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 
 import KeycloakAdapter, { KeycloakAuthConfig } from '../src/auth/KeycloakAdapter';
 import { ErrorComponentProps, SecurityContext, SecurityContextValue } from '../src/SecurityContext';
@@ -110,7 +110,7 @@ it('should return error when auth.login throws error', async () => {
   );
 
   // wait for auth.login...
-  await wait(() => {
+  await waitFor(() => {
     expect(queryByText(/TEST Loading\.\.\./)).not.toBeInTheDocument();
   });
 
@@ -152,7 +152,7 @@ it('should return secured content when login correctly', async () => {
   auth.isAuthenticated.mockReturnValue(true);
   auth.isAuthenticating.mockResolvedValue(true);
   // wait for auth.login...
-  await wait(() => {
+  await waitFor(() => {
     expect(queryByText(/TEST Loading\.\.\./)).not.toBeInTheDocument();
   });
 

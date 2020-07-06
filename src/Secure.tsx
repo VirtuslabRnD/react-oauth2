@@ -15,6 +15,8 @@ export type Props = {
 };
 
 export default class Secure<P> extends Component<P & Props, SecureState> {
+  public static readonly contextType = SecurityContext;
+
   public readonly state: SecureState = {
     isAuthenticated: false,
     isLoading: true,
@@ -54,8 +56,6 @@ export default class Secure<P> extends Component<P & Props, SecureState> {
         });
     }
   }
-
-  public static readonly contextType = SecurityContext;
 
   protected renderChildren(children: ReactNode, authenticatedRender = true): ReactNode {
     // this method is here to deduplicate `render()` in `withSecure` HOC
