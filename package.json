@@ -26,12 +26,9 @@
     "test": "jest",
     "test:ci": "yarn test --ci",
     "lint": "eslint .",
-    "prepare" : "build",
-    "prepublishOnly": "yarn test:ci && yarn lint",
-    "preversion" : "lint"
-
-
-
+    "prepare" : "yarn build",
+    "prepublishOnly": "yarn lint",
+    "preversion" : "yarn lint"
   },
   "bugs": {
     "url": "https://github.com/VirtuslabRnD/react-oauth2/issues"
