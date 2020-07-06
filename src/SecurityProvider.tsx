@@ -10,7 +10,7 @@ import { ErrorComponentProps, SecurityContext, SecurityContextValue } from './Se
 
 export type SecurityProviderProps = Readonly<KeycloakAuthConfig> & {
   readonly children: ReactNode;
-  // todo use <Suspense> some day instead...
+  // todo use <Suspense> + <ErrorBoundary> some day instead...
   readonly fallback: SecurityContextValue['fallbackComponent'];
   readonly error: SecurityContextValue['errorComponent'];
 };
@@ -31,7 +31,7 @@ function SecurityProvider(props: SecurityProviderProps): ReactElement | null {
     let cancelled = false;
     void keycloakAuth
       .isAuthenticating()
-      .then(() => {
+      .finally(() => {
         if (!cancelled) {
           setLoading(false);
         }

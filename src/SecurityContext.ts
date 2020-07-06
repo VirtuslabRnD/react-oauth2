@@ -14,4 +14,4 @@ export type SecurityContextValue = {
 
 export const SecurityContext = createContext<SecurityContextValue | undefined>(undefined);
 
-export default undefined;
+export default {};

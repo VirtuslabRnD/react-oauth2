@@ -18,4 +18,4 @@ export abstract class AbstractAdapter {
   public abstract logout(redirectUri?: string): Promise<void>;
 }
 
-export default undefined;
+export default {};
