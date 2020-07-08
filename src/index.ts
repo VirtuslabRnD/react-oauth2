@@ -1,16 +1,15 @@
 import Secure from './Secure';
 import SecureRoute from './SecureRoute';
-import {
-  SecurityContext,
-  SecurityContextValue as ISecurityContextValue,
-  ErrorComponentProps as IErrorComponentProps,
-} from './SecurityContext';
+import { SecurityContext } from './SecurityContext';
 import SecurityProvider from './SecurityProvider';
 import withSecure from './withSecure';
 import useAuth from './useAuth';
+import withTestSecurityContextProvider from './withTestSecurityContextProvider';
 
-export type SecurityContextValue = ISecurityContextValue;
-export type ErrorComponentProps = IErrorComponentProps;
+export type {
+  SecurityContextValue,
+  ErrorComponentProps,
+} from './SecurityContext';
 
 export {
   useAuth,
@@ -19,4 +18,5 @@ export {
   SecurityContext,
   SecurityProvider,
   withSecure,
+  withTestSecurityContextProvider,
 };

@@ -2,8 +2,7 @@ import React, { ComponentType, FunctionComponent, ReactNode } from 'react';
 import { KeycloakProfile } from 'keycloak-js';
 
 import KeycloakAdapter, { KeycloakAuthConfig } from './auth/KeycloakAdapter';
-
-import { SecurityContext, SecurityContextValue, ErrorComponentProps } from '.';
+import { SecurityContext, SecurityContextValue, ErrorComponentProps } from './SecurityContext';
 
 jest.mock('keycloak-js');
 jest.mock('./auth/KeycloakAdapter');
