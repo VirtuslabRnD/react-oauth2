@@ -4,7 +4,6 @@ import { SecurityContext } from './SecurityContext';
 import SecurityProvider from './SecurityProvider';
 import withSecure from './withSecure';
 import useAuth from './useAuth';
-import withTestSecurityContextProvider from './withTestSecurityContextProvider';
 
 export type {
   SecurityContextValue,
@@ -18,5 +17,4 @@ export {
   SecurityContext,
   SecurityProvider,
   withSecure,
-  withTestSecurityContextProvider,
 };
