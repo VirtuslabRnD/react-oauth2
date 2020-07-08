@@ -1,6 +1,6 @@
 /* eslint-disable import/first */
 jest.mock('keycloak-js');
-jest.mock('./auth/KeycloakAdapter');
+jest.mock('../auth/KeycloakAdapter');
 
 import React, {
   ComponentType,
@@ -9,8 +9,8 @@ import React, {
 } from 'react';
 import { KeycloakProfile } from 'keycloak-js';
 
-import KeycloakAdapter, { KeycloakAuthConfig } from './auth/KeycloakAdapter';
-import { SecurityContext, SecurityContextValue, ErrorComponentProps } from './SecurityContext';
+import KeycloakAdapter, { KeycloakAuthConfig } from '../auth/KeycloakAdapter';
+import { SecurityContext, SecurityContextValue, ErrorComponentProps } from '../SecurityContext';
 
 const config: KeycloakAuthConfig = {
   realm: 'test-realm',
