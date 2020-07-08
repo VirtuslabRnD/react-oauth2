@@ -1,6 +1,6 @@
 {
   "name": "@virtuslab/react-oauth2",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "> TODO: description",
   "author": "Adam Kusmierz <adam@kusmierz.be>",
   "homepage": "https://github.com/VirtusLab/nfs-frontend#readme",
@@ -26,9 +26,9 @@
     "test": "jest",
     "test:ci": "yarn test --ci",
     "lint": "eslint .",
-    "prepare" : "yarn build",
+    "prepare": "yarn build",
     "prepublishOnly": "yarn lint",
-    "preversion" : "yarn lint"
+    "preversion": "yarn lint"
   },
   "bugs": {
     "url": "https://github.com/VirtuslabRnD/react-oauth2/issues"
