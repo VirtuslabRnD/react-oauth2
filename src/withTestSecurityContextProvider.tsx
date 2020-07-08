@@ -1,11 +1,16 @@
-import React, { ComponentType, FunctionComponent, ReactNode } from 'react';
+/* eslint-disable import/first */
+jest.mock('keycloak-js');
+jest.mock('./auth/KeycloakAdapter');
+
+import React, {
+  ComponentType,
+  FunctionComponent,
+  ReactElement,
+} from 'react';
 import { KeycloakProfile } from 'keycloak-js';
 
 import KeycloakAdapter, { KeycloakAuthConfig } from './auth/KeycloakAdapter';
 import { SecurityContext, SecurityContextValue, ErrorComponentProps } from './SecurityContext';
-
-jest.mock('keycloak-js');
-jest.mock('./auth/KeycloakAdapter');
 
 const config: KeycloakAuthConfig = {
   realm: 'test-realm',
@@ -19,7 +24,7 @@ const withTestSecurityContextProvider = (
   isAuthenticated?: boolean,
   fallbackComponent?: NonNullable<FunctionComponent>,
   errorComponent?: NonNullable<FunctionComponent<ErrorComponentProps>>,
-): ReactNode => {
+) => {
   const auth = new KeycloakAdapter(config) as jest.Mocked<KeycloakAdapter>;
   const value: SecurityContextValue = {
     auth,
@@ -38,7 +43,7 @@ const withTestSecurityContextProvider = (
   return function enhance<WrappedProps>(
     WrappedComponent: ComponentType<WrappedProps>,
   ) {
-    return function context(props: WrappedProps): ReactNode {
+    return function context(props: WrappedProps): ReactElement {
       return (
         <SecurityContext.Provider value={value}>
           <WrappedComponent {...props} />

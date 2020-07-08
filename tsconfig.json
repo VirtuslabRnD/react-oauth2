@@ -28,5 +28,9 @@
     ],
     "declaration": true,
     "outDir": "./lib"
-  }
+  },
+  "include": [
+    "@types/**/*",
+    "src/**/*",
+  ]
 }
