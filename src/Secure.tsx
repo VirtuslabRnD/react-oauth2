@@ -14,6 +14,7 @@ export type Props = {
   readonly redirectUri?: string;
 };
 
+// todo rewrite it to function-component
 export default class Secure<P> extends Component<P & Props, SecureState> {
   public static readonly contextType = SecurityContext;
 
@@ -36,7 +37,7 @@ export default class Secure<P> extends Component<P & Props, SecureState> {
     }
 
     const { auth } = this.context;
-    const { prompt, redirectUri, autologin = true } = this.props;
+    const { prompt, redirectUri, autologin = false } = this.props;
 
     if (auth.isAuthenticated()) {
       this.setState(() => ({ isLoading: false, isAuthenticated: true }));

@@ -3,7 +3,7 @@ import { render, waitFor } from '@testing-library/react';
 
 import KeycloakAdapter, { KeycloakAuthConfig } from '../src/auth/KeycloakAdapter';
 import { ErrorComponentProps, SecurityContext, SecurityContextValue } from '../src/SecurityContext';
-import Secure from '../src/Secure';
+import Anonymous from '../src/Anonymous';
 
 jest.mock('../src/auth/KeycloakAdapter');
 
@@ -35,9 +35,9 @@ it('renders without crashing', () => {
 
   render(
     <SecurityContext.Provider value={value}>
-      <Secure>
-        Secured Test Content
-      </Secure>
+      <Anonymous>
+        Anonymous Test Content
+      </Anonymous>
     </SecurityContext.Provider>,
   );
 });
@@ -45,9 +45,9 @@ it('renders without crashing', () => {
 it('fails with no Security Context', () => {
   expect(() => {
     render(
-      <Secure>
-        Secured Test Content
-      </Secure>,
+      <Anonymous>
+        Anonymous only Test Content
+      </Anonymous>,
     );
   }).toThrow(new Error('Security Error: Secure Component has no Context'));
 });
@@ -70,41 +70,36 @@ it('should show <Fallback /> and not the content if still loading...', () => {
 
   const { getByText, queryByText } = render(
     <SecurityContext.Provider value={value}>
-      <Secure>
-        Secured Test Content
-      </Secure>
+      <Anonymous>
+        Anonymous only Test Content
+      </Anonymous>
     </SecurityContext.Provider>,
   );
 
   expect(getByText('TEST Loading...')).toBeInTheDocument();
-  expect(queryByText(/Secured Test Content/)).not.toBeInTheDocument();
+  expect(queryByText(/Anonymous only Test Content/)).not.toBeInTheDocument();
 });
 
-it('should return error when auth.login throws error', async () => {
+
+it('should return anonymous content if and only if user is not logged in', async () => {
   const auth = new KeycloakAdapter(config) as jest.Mocked<KeycloakAdapter>;
   const value: SecurityContextValue = {
     auth,
     fallbackComponent() {
       return <>TEST Loading...</>;
     },
-    errorComponent({ error }: ErrorComponentProps) {
-      return (
-        <div>
-          {`THIS IS ACCESS ERROR! ${error.message}. TEST`}
-        </div>
-      );
-    },
+    errorComponent: null,
   };
 
-  auth.login.mockRejectedValue(new Error('Login TEST Error'));
+  auth.login.mockResolvedValue();
   auth.isAuthenticated.mockReturnValue(false);
   auth.isAuthenticating.mockResolvedValue(false);
 
   const { getByText, queryByText } = render(
     <SecurityContext.Provider value={value}>
-      <Secure autologin={true}>
-        Secured Test Content
-      </Secure>
+      <Anonymous>
+        Anonymous only Test Content
+      </Anonymous>
       Public things
     </SecurityContext.Provider>,
   );
@@ -115,12 +110,12 @@ it('should return error when auth.login throws error', async () => {
   });
 
   expect(getByText(/Public things/)).toBeInTheDocument();
-  expect(getByText(/THIS IS ACCESS ERROR! Login TEST Error. TEST/)).toBeInTheDocument();
-  expect(queryByText(/Secured Test Content/)).not.toBeInTheDocument();
+  expect(getByText(/Anonymous only Test Content/)).toBeInTheDocument();
+  expect(queryByText(/THIS IS ACCESS ERROR! Login TEST Error. TEST/)).not.toBeInTheDocument();
   expect(queryByText(/TEST Loading\.\.\./)).not.toBeInTheDocument();
 });
 
-it('should return secured content when login correctly', async () => {
+it('shouldn\'t return anonymous content when login correctly', async () => {
   const auth = new KeycloakAdapter(config) as jest.Mocked<KeycloakAdapter>;
   const value: SecurityContextValue = {
     auth,
@@ -142,9 +137,9 @@ it('should return secured content when login correctly', async () => {
 
   const { getByText, queryByText } = render(
     <SecurityContext.Provider value={value}>
-      <Secure>
-        Secured Test Content
-      </Secure>
+      <Anonymous>
+        Anonymous only Test Content
+      </Anonymous>
       Public things
     </SecurityContext.Provider>,
   );
@@ -157,7 +152,7 @@ it('should return secured content when login correctly', async () => {
   });
 
   expect(getByText(/Public things/)).toBeInTheDocument();
-  expect(getByText(/Secured Test Content/)).toBeInTheDocument();
+  expect(queryByText(/Anonymous only Test Content/)).not.toBeInTheDocument();
   expect(queryByText(/THIS IS ACCESS ERROR!/)).not.toBeInTheDocument();
   expect(queryByText(/TEST Loading\.\.\./)).not.toBeInTheDocument();
 });
