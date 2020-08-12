@@ -1,6 +1,6 @@
 {
   "name": "@virtuslab/react-oauth2",
-  "version": "1.2.13",
+  "version": "1.2.14",
   "description": "> TODO: description",
   "author": "Adam Kusmierz <adam@kusmierz.be>",
   "homepage": "https://github.com/VirtusLab/nfs-frontend#readme",
@@ -34,7 +34,7 @@
     "url": "https://github.com/VirtuslabRnD/react-oauth2/issues"
   },
   "dependencies": {
-    "keycloak-js": "^10.0.2"
+    "keycloak-js": "^11.0.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.0",
@@ -47,7 +47,7 @@
     "@typescript-eslint/eslint-plugin": "^3.5.0",
     "eslint": "^7.4.0",
     "eslint-config-airbnb": "^18.1.0",
-    "eslint-config-airbnb-typescript": "^8.0.2",
+    "eslint-config-airbnb-typescript": "^9.0.0",
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.19.0",
