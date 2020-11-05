@@ -80,7 +80,6 @@ it('should show <Fallback /> and not the content if still loading...', () => {
   expect(queryByText(/Anonymous only Test Content/)).not.toBeInTheDocument();
 });
 
-
 it('should return anonymous content if and only if user is not logged in', async () => {
   const auth = new KeycloakAdapter(config) as jest.Mocked<KeycloakAdapter>;
   const value: SecurityContextValue = {

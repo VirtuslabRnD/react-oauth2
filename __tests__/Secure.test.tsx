@@ -102,7 +102,7 @@ it('should return error when auth.login throws error', async () => {
 
   const { getByText, queryByText } = render(
     <SecurityContext.Provider value={value}>
-      <Secure autologin={true}>
+      <Secure autologin>
         Secured Test Content
       </Secure>
       Public things
