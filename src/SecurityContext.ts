@@ -1,14 +1,15 @@
-import { createContext, FunctionComponent } from 'react';
+import { createContext, FunctionComponent, ReactElement } from 'react';
 
 import KeycloakAdapter from './auth/KeycloakAdapter';
 
 export type ErrorComponentProps = {
-  readonly error: Error;
+  readonly error?: Error;
+  readonly authenticated: boolean;
 };
 
 export type SecurityContextValue = {
   readonly auth: KeycloakAdapter;
-  readonly fallbackComponent: NonNullable<FunctionComponent>;
+  readonly fallback: ReactElement;
   readonly errorComponent: NonNullable<FunctionComponent<ErrorComponentProps>> | null;
 };
 

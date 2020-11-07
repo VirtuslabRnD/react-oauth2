@@ -23,9 +23,7 @@ it('renders without crashing', () => {
   const auth = new KeycloakAdapter(config) as jest.Mocked<KeycloakAdapter>;
   const value: SecurityContextValue = {
     auth,
-    fallbackComponent() {
-      return <>TEST Loading...</>;
-    },
+    fallback: <>TEST Loading...</>,
     errorComponent: null,
   };
 
@@ -56,9 +54,7 @@ it('should show <Fallback /> and not the content if still loading...', () => {
   const auth = new KeycloakAdapter(config) as jest.Mocked<KeycloakAdapter>;
   const value: SecurityContextValue = {
     auth,
-    fallbackComponent() {
-      return <>TEST Loading...</>;
-    },
+    fallback: <>TEST Loading...</>,
     errorComponent: null,
   };
 
@@ -84,25 +80,22 @@ it('should return error when auth.login throws error', async () => {
   const auth = new KeycloakAdapter(config) as jest.Mocked<KeycloakAdapter>;
   const value: SecurityContextValue = {
     auth,
-    fallbackComponent() {
-      return <>TEST Loading...</>;
-    },
+    fallback: <>TEST Loading...</>,
     errorComponent({ error }: ErrorComponentProps) {
       return (
         <div>
-          {`THIS IS ACCESS ERROR! ${error.message}. TEST`}
+          {`THIS IS ACCESS ERROR! ${error?.message || undefined}. TEST`}
         </div>
       );
     },
   };
 
-  auth.login.mockRejectedValue(new Error('Login TEST Error'));
   auth.isAuthenticated.mockReturnValue(false);
-  auth.isAuthenticating.mockResolvedValue(false);
+  auth.isAuthenticating.mockRejectedValue(new Error('Login TEST Error'));
 
   const { getByText, queryByText } = render(
     <SecurityContext.Provider value={value}>
-      <Secure autologin>
+      <Secure>
         Secured Test Content
       </Secure>
       Public things
@@ -124,13 +117,11 @@ it('should return secured content when login correctly', async () => {
   const auth = new KeycloakAdapter(config) as jest.Mocked<KeycloakAdapter>;
   const value: SecurityContextValue = {
     auth,
-    fallbackComponent() {
-      return <>TEST Loading...</>;
-    },
+    fallback: <>TEST Loading...</>,
     errorComponent({ error }: ErrorComponentProps) {
       return (
         <div>
-          {`THIS IS ACCESS ERROR! ${error.message}. TEST`}
+          {`THIS IS ACCESS ERROR! ${error?.message || undefined}. TEST`}
         </div>
       );
     },

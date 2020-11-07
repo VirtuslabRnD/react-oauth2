@@ -1,4 +1,9 @@
-import React, { Component, ContextType, ReactNode } from 'react';
+import React, {
+  Component,
+  ContextType,
+  ReactNode,
+  ReactElement,
+} from 'react';
 
 import { SecurityContext } from './SecurityContext';
 
@@ -9,9 +14,7 @@ export type SecureState = {
 };
 
 export type Props = {
-  readonly autologin?: boolean;
-  readonly prompt?: 'none' | 'login';
-  readonly redirectUri?: string;
+  readonly otherwise?: ReactElement;
 };
 
 // todo rewrite it to function-component
@@ -37,17 +40,11 @@ export default class Secure<P> extends Component<P & Props, SecureState> {
     }
 
     const { auth } = this.context;
-    const { prompt, redirectUri, autologin = false } = this.props;
 
     if (auth.isAuthenticated()) {
       this.setState(() => ({ isLoading: false, isAuthenticated: true }));
     } else {
       auth.isAuthenticating()
-        .then(async () => {
-          if (!auth.isAuthenticated() && autologin) {
-            await auth.login(redirectUri, undefined, prompt);
-          }
-        })
         .then(() => {
           this.setState(() => ({ isLoading: false, isAuthenticated: auth.isAuthenticated() }));
         })
@@ -65,21 +62,22 @@ export default class Secure<P> extends Component<P & Props, SecureState> {
     }
 
     const { isAuthenticated, isLoading, error } = this.state;
-    const { fallbackComponent: FallbackComponent, errorComponent: ErrorComponent } = this.context;
+    const { fallback, errorComponent: ErrorComponent } = this.context;
+    const { otherwise } = this.props;
 
     if (error) {
-      return ErrorComponent ? <ErrorComponent error={error} /> : 'Access Denied.';
+      return ErrorComponent ? <ErrorComponent authenticated={isAuthenticated} error={error} /> : 'Access Denied.';
     }
 
     if (isLoading) {
-      return <FallbackComponent />;
+      return fallback;
     }
 
     if (authenticatedRender ? isAuthenticated : !isAuthenticated) {
       return children;
     }
 
-    return null;
+    return otherwise || null;
   }
 
   public render(): ReactNode {

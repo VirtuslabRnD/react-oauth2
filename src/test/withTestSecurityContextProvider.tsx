@@ -22,13 +22,13 @@ const withTestSecurityContextProvider = (
   token: Promise<string>,
   userProfile?: KeycloakProfile,
   isAuthenticated?: boolean,
-  fallbackComponent?: NonNullable<FunctionComponent>,
+  fallback?: ReactElement,
   errorComponent?: NonNullable<FunctionComponent<ErrorComponentProps>>,
 ) => {
   const auth = new KeycloakAdapter(config) as jest.Mocked<KeycloakAdapter>;
   const value: SecurityContextValue = {
     auth,
-    fallbackComponent: fallbackComponent || (() => <>TEST Loading...</>) as FunctionComponent,
+    fallback: fallback || (<>TEST Loading...</>),
     errorComponent: errorComponent || null,
   };
 

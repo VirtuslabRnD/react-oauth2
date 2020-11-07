@@ -23,9 +23,7 @@ it('renders without crashing', () => {
   const auth = new KeycloakAdapter(config) as jest.Mocked<KeycloakAdapter>;
   const value: SecurityContextValue = {
     auth,
-    fallbackComponent() {
-      return <>TEST Loading...</>;
-    },
+    fallback: <>TEST Loading...</>,
     errorComponent: null,
   };
 
@@ -56,9 +54,7 @@ it('should show <Fallback /> and not the content if still loading...', () => {
   const auth = new KeycloakAdapter(config) as jest.Mocked<KeycloakAdapter>;
   const value: SecurityContextValue = {
     auth,
-    fallbackComponent() {
-      return <>TEST Loading...</>;
-    },
+    fallback: <>TEST Loading...</>,
     errorComponent: null,
   };
 
@@ -84,9 +80,7 @@ it('should return anonymous content if and only if user is not logged in', async
   const auth = new KeycloakAdapter(config) as jest.Mocked<KeycloakAdapter>;
   const value: SecurityContextValue = {
     auth,
-    fallbackComponent() {
-      return <>TEST Loading...</>;
-    },
+    fallback: <>TEST Loading...</>,
     errorComponent: null,
   };
 
@@ -118,21 +112,19 @@ it('shouldn\'t return anonymous content when login correctly', async () => {
   const auth = new KeycloakAdapter(config) as jest.Mocked<KeycloakAdapter>;
   const value: SecurityContextValue = {
     auth,
-    fallbackComponent() {
-      return <>TEST Loading...</>;
-    },
+    fallback: <>TEST Loading...</>,
     errorComponent({ error }: ErrorComponentProps) {
       return (
         <div>
-          {`THIS IS ACCESS ERROR! ${error.message}. TEST`}
+          {`THIS IS ACCESS ERROR! ${error?.message || 'undefined'}. TEST`}
         </div>
       );
     },
   };
 
   auth.login.mockResolvedValue();
-  auth.isAuthenticated.mockReturnValue(false); // false, because "it isn't isAuthenticated yet"
-  auth.isAuthenticating.mockResolvedValue(false);
+  auth.isAuthenticated.mockReturnValue(true);
+  auth.isAuthenticating.mockResolvedValue(true);
 
   const { getByText, queryByText } = render(
     <SecurityContext.Provider value={value}>
@@ -143,8 +135,6 @@ it('shouldn\'t return anonymous content when login correctly', async () => {
     </SecurityContext.Provider>,
   );
 
-  auth.isAuthenticated.mockReturnValue(true);
-  auth.isAuthenticating.mockResolvedValue(true);
   // wait for auth.login...
   await waitFor(() => {
     expect(queryByText(/TEST Loading\.\.\./)).not.toBeInTheDocument();

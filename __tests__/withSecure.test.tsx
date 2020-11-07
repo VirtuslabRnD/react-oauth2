@@ -24,9 +24,7 @@ it('renders withSecure and withoutSecurity HOCs properly when authenticated', as
   const auth = new KeycloakAdapter(config) as jest.Mocked<KeycloakAdapter>;
   const value: SecurityContextValue = {
     auth,
-    fallbackComponent() {
-      return <>TEST Loading...</>;
-    },
+    fallback: <>TEST Loading...</>,
     errorComponent: null,
   };
 
@@ -66,9 +64,7 @@ it('renders withSecure and withoutSecurity HOCs properly when NOT authenticated'
   const auth = new KeycloakAdapter(config) as jest.Mocked<KeycloakAdapter>;
   const value: SecurityContextValue = {
     auth,
-    fallbackComponent() {
-      return <>TEST Loading...</>;
-    },
+    fallback: <>TEST Loading...</>,
     errorComponent: null,
   };
 

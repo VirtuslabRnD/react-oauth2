@@ -11,14 +11,14 @@ import { ErrorComponentProps, SecurityContext, SecurityContextValue } from './Se
 export type SecurityProviderProps = Readonly<KeycloakAuthConfig> & {
   readonly children: ReactNode;
   // todo use <Suspense> + <ErrorBoundary> some day instead...
-  readonly fallback: SecurityContextValue['fallbackComponent'];
+  readonly fallback: SecurityContextValue['fallback'];
   readonly error: SecurityContextValue['errorComponent'];
 };
 
 function SecurityProvider(props: SecurityProviderProps): ReactElement | null {
   const {
     children,
-    fallback: FallbackComponent,
+    fallback,
     error,
   } = props;
   const [auth, setAuth] = useState<KeycloakAdapter | undefined>(undefined);
@@ -47,14 +47,14 @@ function SecurityProvider(props: SecurityProviderProps): ReactElement | null {
   }
 
   if (loading) {
-    return (<FallbackComponent />);
+    return fallback;
   }
 
   return (
     <SecurityContext.Provider
       value={{
         auth,
-        fallbackComponent: FallbackComponent,
+        fallback,
         errorComponent: error,
       }}
     >
@@ -66,9 +66,7 @@ function SecurityProvider(props: SecurityProviderProps): ReactElement | null {
 SecurityProvider.defaultProps = {
   responseMode: 'fragment',
   autoRenew: true,
-  fallback(): null {
-    return null;
-  },
+  fallback: undefined,
   error(err: ErrorComponentProps) {
     return (
       <>
