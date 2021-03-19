@@ -4,6 +4,7 @@ import Keycloak, {
   KeycloakLoginOptions,
   KeycloakProfile,
 } from 'keycloak-js';
+import pTimeout from 'p-timeout';
 
 import { AbstractAdapter } from './AbstractAdapter';
 
@@ -14,6 +15,7 @@ export interface KeycloakAuthConfig
   readonly realm: string;
   readonly clientId: string;
   readonly autoRenew?: boolean;
+  readonly timeout?: number;
 }
 
 export default class KeycloakAdapter extends AbstractAdapter {
@@ -29,6 +31,8 @@ export default class KeycloakAdapter extends AbstractAdapter {
 
   protected userProfile?: KeycloakProfile;
 
+  protected readonly timeout: number;
+
   public constructor(config: KeycloakAuthConfig) {
     super();
 
@@ -42,8 +46,11 @@ export default class KeycloakAdapter extends AbstractAdapter {
       url,
       onLoad = 'check-sso',
       silentCheckSsoRedirectUri,
+      timeout,
     } = config;
     this.config = config;
+
+    this.timeout = timeout || 5000;
 
     this.keycloak = Keycloak({
       clientId,
@@ -73,15 +80,19 @@ export default class KeycloakAdapter extends AbstractAdapter {
       void this.logout();
     };
 
-    this.initializing = keycloak
-      .init({
-        flow,
-        onLoad,
-        redirectUri,
-        responseMode,
-        silentCheckSsoRedirectUri,
-        pkceMethod: 'S256',
-      });
+    this.initializing = pTimeout(
+      keycloak
+        .init({
+          flow,
+          onLoad,
+          redirectUri,
+          responseMode,
+          silentCheckSsoRedirectUri,
+          pkceMethod: 'S256',
+        }),
+      this.timeout,
+      () => Promise.resolve(false),
+    );
 
     void this.fetchUserProfile();
   }
@@ -115,17 +126,20 @@ export default class KeycloakAdapter extends AbstractAdapter {
         return this.fetchingUserProfile;
       }
 
-      this.fetchingUserProfile = this.keycloak.loadUserProfile()
-        .then((profile: KeycloakProfile): KeycloakProfile => {
-          // cache user profile
-          this.userProfile = {
-            ...profile,
-            // add user ID if missing
-            id: profile.id || this.keycloak.subject,
-          };
+      this.fetchingUserProfile = pTimeout(
+        this.keycloak.loadUserProfile()
+          .then((profile: KeycloakProfile): KeycloakProfile => {
+            // cache user profile
+            this.userProfile = {
+              ...profile,
+              // add user ID if missing
+              id: profile.id || this.keycloak.subject,
+            };
 
-          return this.userProfile;
-        });
+            return this.userProfile;
+          }),
+        this.timeout,
+      );
 
       return this.fetchingUserProfile;
     }
@@ -168,18 +182,21 @@ export default class KeycloakAdapter extends AbstractAdapter {
     const { locale } = this.config;
 
     if (!this.logging) {
-      this.logging = this.initializing.then(async (authenticated) => {
-        if (authenticated && this.isAuthenticated()) {
-          return Promise.resolve();
-        }
+      this.logging = pTimeout(
+        this.initializing.then(async (authenticated) => {
+          if (authenticated && this.isAuthenticated()) {
+            return Promise.resolve();
+          }
 
-        return this.keycloak.login({
-          locale,
-          prompt,
-          redirectUri,
-          idpHint,
-        });
-      });
+          return this.keycloak.login({
+            locale,
+            prompt,
+            redirectUri,
+            idpHint,
+          });
+        }),
+        this.timeout,
+      );
 
       await this.logging;
       await this.fetchingUserProfile;
