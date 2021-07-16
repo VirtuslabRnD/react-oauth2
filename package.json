@@ -1,6 +1,6 @@
 {
   "name": "@virtuslab/react-oauth2",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "",
   "author": "Adam Kusmierz <adam@kusmierz.be>",
   "homepage": "https://github.com/VirtusLabRnD/react-oauth2#readme",
@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "keycloak-js": "^14.0.0",
-    "p-timeout": "^5.0.0"
+    "p-timeout": "^4.1.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.14.1",
