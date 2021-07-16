@@ -67,11 +67,11 @@ SecurityProvider.defaultProps = {
   responseMode: 'fragment',
   autoRenew: true,
   fallback: undefined,
-  error(err: ErrorComponentProps) {
+  error({ error }: ErrorComponentProps) {
     return (
       <>
         Error:
-        {err.error}
+        {error}
       </>
     );
   },
