@@ -1,11 +1,11 @@
-import { KeycloakInstance } from 'keycloak-js';
+import Keycloak from 'keycloak-js';
 
 export const mockKeycloakLogin = jest.fn();
 export const mockKeycloakLogout = jest.fn();
 export const mockKeycloakInit = jest.fn();
 export const mockKeycloakLoadUserProfile = jest.fn();
 
-export default (): KeycloakInstance => ({
+export default (): Keycloak => ({
   login: mockKeycloakLogin,
   logout: mockKeycloakLogout,
   init: mockKeycloakInit.mockResolvedValue(false),

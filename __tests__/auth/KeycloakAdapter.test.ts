@@ -66,7 +66,7 @@ it('should return user profile', async () => {
 
   await keycloakAdapter.login();
 
-  expect(keycloakAdapter.isAuthenticated()).toBeTrue();
+  expect(keycloakAdapter.isAuthenticated()).toBe(true);
 
   expect(keycloakAdapter.getUserProfile()).toEqual({
     id: 'f:12:54',

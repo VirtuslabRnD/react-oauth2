@@ -1,6 +1,5 @@
 import Keycloak, {
   KeycloakInitOptions,
-  KeycloakInstance,
   KeycloakLoginOptions,
   KeycloakProfile,
 } from 'keycloak-js';
@@ -19,7 +18,7 @@ export interface KeycloakAuthConfig
 }
 
 export default class KeycloakAdapter extends AbstractAdapter {
-  protected readonly keycloak: KeycloakInstance;
+  protected readonly keycloak: Keycloak;
 
   protected readonly config: KeycloakAuthConfig;
 
