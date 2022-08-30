@@ -1,6 +1,6 @@
 {
   "name": "@virtuslab/react-oauth2",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "",
   "author": "Adam Kusmierz <adam@kusmierz.be>",
   "homepage": "https://github.com/VirtusLabRnD/react-oauth2#readme",
@@ -22,7 +22,9 @@
     "url": "https://github.com/VirtuslabRnD/react-oauth2.git"
   },
   "scripts": {
-    "build": "tsc",
+    "clean": "rm -rf ./lib",
+    "build:dev": "yarn clean && tsc",
+    "build": "yarn clean && tsc -p tsconfig.prod.json",
     "test": "jest --env=jsdom",
     "test:ci": "yarn test --ci",
     "lint": "eslint src",
