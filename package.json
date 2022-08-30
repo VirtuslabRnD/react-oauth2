@@ -22,7 +22,9 @@
     "url": "https://github.com/VirtuslabRnD/react-oauth2.git"
   },
   "scripts": {
-    "build": "tsc",
+    "clean": "rm -rf ./lib",
+    "build:dev": "yarn clean && tsc",
+    "build": "yarn clean && tsc -p tsconfig.prod.json",
     "test": "jest --env=jsdom",
     "test:ci": "yarn test --ci",
     "lint": "eslint src",
