@@ -2,7 +2,7 @@ import React, { ComponentType, ComponentClass, ReactNode } from 'react';
 
 import Secure from './Secure';
 
-export default function withSecure<P>(
+export default function withSecure<P extends Readonly<P>>(
   WrappedComponent: ComponentType<P>,
   authenticatedRender = true,
 ): ComponentClass<P> {

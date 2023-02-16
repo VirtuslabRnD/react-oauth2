@@ -15,7 +15,7 @@ export type SecureState = {
 
 export type Props = {
   readonly otherwise?: ReactElement;
-};
+} & { children?: ReactNode | undefined };
 
 // todo rewrite it to function-component
 export default class Secure<P> extends Component<P & Props, SecureState> {
