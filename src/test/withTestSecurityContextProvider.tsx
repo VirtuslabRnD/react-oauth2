@@ -40,7 +40,7 @@ const withTestSecurityContextProvider = (
     auth.getUserProfile.mockReturnValue(userProfile);
   }
 
-  return function enhance<WrappedProps>(
+  return function enhance<WrappedProps extends JSX.IntrinsicAttributes>(
     WrappedComponent: ComponentType<WrappedProps>,
   ) {
     return function context(props: WrappedProps): ReactElement {
